@@ -1,0 +1,19 @@
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.home-page {
+  background-color: rgb(1, 1, 1);
+}
+
+.home {
+  background-image: url(/Image/leaf.jpg);
+  background-repeat: no-repeat;
+  /* Do not repeat the image */
+  background-size: cover;
+  /* Scale the image to cover the container */
+  background-position: center;
+}
+
+.title {}

@@ -1,0 +1,48 @@
+import { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebaseConfig";
+import "./App.css";
+import Navbar from "./component/Navbar";
+import Home from "./component/Home";
+import FriendStoryForm from "./Persons/FriendStoryForm";
+import FriendStoriesList from "./Persons/FriendStoriesList";
+import LoginForm from "./security/LoginForm";
+
+function ProtectedRoute({ user }) {
+  return user ? <Outlet /> : <Navigate to="/login" />;
+}
+function App() {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+  return (
+    <>
+      <Router>
+        {user && <Navbar />}
+        <Routes>
+          <Route path="/login" element={<LoginForm />} />
+
+          <Route element={<ProtectedRoute user={user} />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/form" element={<FriendStoryForm />} />
+            <Route path="/list" element={<FriendStoriesList />} />
+          </Route>
+        </Routes>
+      </Router>
+    </>
+  );
+}
+
+export default App;
